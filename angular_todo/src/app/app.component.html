@@ -1,0 +1,85 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<button (click)="setFilter()">filter</button>
+<input (input)="user=$event.target.value" />
+{{user}}
+
+<div style="text-align:center">
+  <h1>
+    Welcome to {{ title }}!
+  </h1>
+</div>
+<h2>Here are some Todos: </h2>
+<div *ngIf="currentedit">
+  <p>Edit {{current?.id}} </p>
+  <table>
+    <tr>
+      <td>Name: </td>
+      <td>
+        <select [(ngModel)]="this.assignedTo" value="{{this.assignedTo}}">
+          <option></option>
+          <option *ngFor="let a of this.assignee">{{a.name}}</option>
+        </select>
+
+      </td>
+    </tr>
+    <tr>
+      <td>Description: </td>
+      <td><input [(ngModel)]="this.description" value="{{this.description}}" type="text"></td>
+    </tr>
+    <tr>
+      <td>Done: </td>
+      <td><input [(ngModel)]="this.tododone" checked="{{this.tododone}}" type="checkbox"></td>
+    </tr>
+    <mat-form-field>
+    <tr>
+        <td>
+          <input [(ngModel)]="date" matInput [matDatepicker]="picker" placeholder="Choose a date">
+        </td>
+        <td>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </td>
+    </tr>
+  </mat-form-field>
+  </table>
+<br>
+  <button (click)="update(current?.id)">Update</button>
+
+</div>
+
+<ul *ngFor="let item of this.todos">
+  <div *ngIf="(filter||!item.done)&&(!user||item.assignedTo===user) ">
+    <li> Description: {{item.description}}</li>
+    <li> Assigned to: {{item.assignedTo}}</li>
+    <li> ID: {{item.id}}</li>
+    <li> Done: {{item.done?true:false}}</li>
+    <li> Date: {{item?.date}}</li>
+
+    <button (click)="edit(item.id)">edit</button>
+    <button (click)="delete(item.id)">Delete</button>
+
+  </div>
+
+</ul>
+
+<div *ngIf="todos.length===0">keine TODOs length={{todos.length}}</div>
+{{filter}}
+
+<table>
+  <tr>
+    <td>Name: </td>
+    <td>
+      <select [(ngModel)]="this.newtodo.assignedTo">
+        <option></option>
+        <option *ngFor="let a of this.assignee" value="{{a.name}}">{{a.name}}</option>
+      </select>
+
+    </td>
+  </tr>
+  <tr>
+    <td>Description: </td>
+    <td><input [(ngModel)]="this.newtodo.description" type="text"></td>
+  </tr>
+
+</table>
+<button [disabled]="!this.newtodo.description" (click)="add()">Add Todo</button>
